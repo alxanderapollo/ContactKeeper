@@ -1,7 +1,12 @@
 //modules are brought it in like this becasue node has a diffrent way to bring in modules
 //to use the import syntax you have to rbing in the babel 
 const express = require('express');
+const connectDB = require('./config/db')
+
 const app = express();
+
+//ConnectDB
+connectDB()
 
 //return hellow world when the server is up and i hit the / endpoint
 app.get('/', (req, res) => {res.json({msg:'Welcome to the ContactKeeper API'})})
