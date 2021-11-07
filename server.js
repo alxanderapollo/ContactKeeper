@@ -7,6 +7,11 @@ const app = express();
 app.get('/', (req, res) => {res.json({msg:'Welcome to the ContactKeeper API'})})
 
 
+//Define our routes
+app.use('/api/users', require('./routes/users'))
+app.use('/api/auth', require('./routes/auth'))
+app.use('/api/contacts', require('./routes/contacts'))
+
 //looks for env var called port first - and it will be used in production or we can use 5000
 const PORT = process.env.PORT || 5000;
 
