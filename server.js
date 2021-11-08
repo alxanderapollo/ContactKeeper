@@ -8,6 +8,10 @@ const app = express();
 //ConnectDB
 connectDB()
 
+//Innit middleware
+//lets our app send and recieve json format data
+app.use(express.json());
+
 //return hellow world when the server is up and i hit the / endpoint
 app.get('/', (req, res) => {res.json({msg:'Welcome to the ContactKeeper API'})})
 
