@@ -1,9 +1,12 @@
 //bring in express and router so we can use those things
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs') //neded to use for bcrypt
 const {check, validationResult} = require('express-validator') //validate
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
+const config = require('config')
+
 
 //4 Main methods for crud 
 //get request - fetch data 
@@ -61,7 +64,26 @@ router.post(
         //finally we save the instance into the DB
         await user.save()
 
-        res.send('User saved')//to test and check
+      //here will use the jwt and we only want to send the payload
+      // will be sent in the token - with the user id we can access all of the content the user has 
+      //whcih is why we were sending the id
+      const payload = {
+          user:{
+              id:user.id
+          }
+      }
+      //pass in the payload , secret whcih is in the defualt.json file
+    //   expiresIn: 360000 means it'll expire in about an hour after the user has logged in
+      jwt.sign(payload,config.get('jwtSecret'), {
+        expiresIn: 360000
+      }, (err, token) => {
+          //if theres an error throw an error
+          if (err) throw err ;
+          //otherwise return the token which will be our jwt
+          res.json({token})
+      });
+         
+      
 
 
 
