@@ -61,15 +61,75 @@ router.post( '/', [auth, [
 // @route  PUT api/contact/:id       -> :id is to determine the specfic user to update
 // @desc   add new contact
 // @access Private 
-router.put( '/:id', (req, res) => {
-    res.send('Update contact')
+router.put( '/:id', auth , async (req, res) => {
+
+    const {name, email,phone, type} = req.body;
+
+    //build a contact object
+    //anc check for each feild
+    const contactFeilds ={};
+    if(name) contactFeilds.name = name;
+    if(email) contactFeilds.email = email;
+    if(phone) contactFeilds.phone = phone;
+    if(type) contactFeilds.type = type;
+
+    try{
+        let contact = await Contact.findById(req.params.id)
+
+        if(!contact) return res.status(404).json({msg: "No contact found"})
+
+        //make sure user owns contact - so only their own contacts can be upodated
+        if(contact.user.toString() !== req.user.id){
+            return res.status(401).json({msg: 'not authorized'})
+        }
+
+        contact = await Contact.findByIdAndUpdate(req.params.id, 
+            {$set: contactFeilds},
+            {new: true});
+            res.json(contact);
+    }catch(e){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+
+    }
 }) 
 
 // @route  Delete api/contact/:id       -> :id is to determine the specfic user to update
 // @desc   Delete contact
 // @access Private 
-router.delete( '/:id', (req, res) => {
-    res.send('Delete contact')
+router.delete( '/:id', auth, async (req, res) => {
+
+
+    const {name, email,phone, type} = req.body;
+
+    //build a contact object
+    //anc check for each feild
+    const contactFeilds ={};
+    if(name) contactFeilds.name = name;
+    if(email) contactFeilds.email = email;
+    if(phone) contactFeilds.phone = phone;
+    if(type) contactFeilds.type = type;
+
+    try{
+        let contact = await Contact.findById(req.params.id)
+
+        if(!contact) return res.status(404).json({msg: "No contact found"})
+
+        //make sure user owns contact - so only their own contacts can be upodated
+        if(contact.user.toString() !== req.user.id){
+            return res.status(401).json({msg: 'not authorized'})
+        }
+
+        await Contact.findByIdAndRemove(req.params.id)
+
+
+            res.json({msg:"contact removed"});
+    }catch(e){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+
+    }
+    
 }) 
 
 
