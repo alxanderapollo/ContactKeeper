@@ -7,6 +7,7 @@ const {check, validationResult} = require('express-validator') //validate
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const config = require('config')
+const auth = require('../middleware/auth') //bring in middle ware for our protected route
 
 //4 Main methods for crud 
 //get request - fetch data 
@@ -16,13 +17,23 @@ const config = require('config')
 
 //submiting data
 
-
+//---------------------------> anytime we need to protect a route we need to bring in our middleware
+//to use our middleware just pass it in as a second paramater - auth - after tha ttry going to that route to test
 // @route  Get api/auth
 // @desc get logged in  user
 // @access Private 
-router.get( '/', (req, res) => {
-    res.send('Get logged in user')
-}) 
+//get the user from the database
+//if we send the correct token and we are logged in the request object will 
+//have the user object attatched to it with the current logged in user id
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route  POST api/auth
 // @desc    auth user and get token
@@ -76,8 +87,6 @@ router.post( '/', [
             res.json({token})
         });
           
-
-
     }catch (err){
         console.error(err.message);
         res.status(500).send('Server Error')
