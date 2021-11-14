@@ -31,8 +31,31 @@ router.get( '/', auth, async (req, res) => {
 // @route  post api/contact
 // @desc   add new contact
 // @access Private 
-router.post( '/', (req, res) => {
-    res.send('Add contact')
+//pass two middlewares 1 auth for private routes
+//2 check validator the way to do that is to put it in an array
+router.post( '/', [auth, [
+    check('name', 'Name is required').not().isEmpty()
+]], async (req, res) => {
+    //check validator
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({errors: errors.array()}); //returns an array with all of the errors
+    }
+
+    //pull out the data from the body
+    const {name, email,phone, type} = req.body;
+
+    try{
+        //if our check validator with the destructred data create a new contact object
+        const newContact = new Contact({name, email, phone, type, user: req.user.id})
+        //save it to the db 
+        const contact = await newContact.save();
+        //return it back to the client
+        res.json(contact)
+    }catch (err){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
 }) 
 
 // @route  PUT api/contact/:id       -> :id is to determine the specfic user to update
