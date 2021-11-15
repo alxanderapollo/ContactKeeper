@@ -1,6 +1,6 @@
 //useReducer is so that we have access to state and dispatch so we can dispatch to our reducer
 import React, { useReducer } from "react";
-import uuid from "uuid"; //generate random ids
+import { v4 as uuidv4 } from "uuid"; //generate random ids
 import ContactContext from "./ContactContext";
 import ContactReducer from "./ContactReducer";
 import {
@@ -43,6 +43,11 @@ const ContactState = (props) => {
   const [state,dispatch] = useReducer(ContactReducer, initialState);
   //Actions
   //Add Contact
+  const addContact = contact => {
+      //produces a random id
+    contact.id = uuidv4();  
+    dispatch({type: ADD_CONTACT, payload: contact});
+  }
 
   //Delete Contact
   //Set Current Contact
@@ -61,7 +66,8 @@ const ContactState = (props) => {
       //provide all the values
       //anything we want to be able to access from other components are placed inside of here
       value={{
-          contacts: state.contacts
+          contacts: state.contacts,
+          addContact
       }}
       >
           {props.children}
