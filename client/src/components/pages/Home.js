@@ -1,10 +1,15 @@
+import React from 'react';
+import Contacts from '../contacts/Contacts' //import Contacts
 export const Home = () => {
     return (
-        <div>
-            <h1>Welcome to the home screen</h1>
-            <p className="my-1">
-                This is a full stack React app for Keeping contacts
-            </p>
+        <div class="grid-2">
+            <div>
+                {/*Contact Form */}
+            </div>
+            <div>
+            <Contacts/>
+            </div>
+            
         </div>
     )
 }
