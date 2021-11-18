@@ -13,6 +13,7 @@ import {
   CLEAR_FILTER,
 } from "../types";
 
+//curent is set to null because want to happen is when we click edit, we want whatever object is clicked edit on willl be placed into the empty peice of state that is current
 const ContactState = (props) => {
   const initialState = {
     contacts: [
@@ -38,6 +39,7 @@ const ContactState = (props) => {
         type: "personal",
       }
     ],
+    current:null 
   };
 
   const [state,dispatch] = useReducer(ContactReducer, initialState);
@@ -50,9 +52,21 @@ const ContactState = (props) => {
   }
 
   //Delete Contact
+  //doesnt require the entire contact obj with the id it can find and delete the contact
+  const deleteContact = id => {
+  dispatch({type: DELETE_CONTACT, payload: id});
+}
+
   //Set Current Contact
+  const setCurrent = contact => {
+    dispatch({type: SET_CURRENT, payload: contact});
+  }
 
   //Clear Current ContactReducer
+  //no payload because it doesnt change state 
+  const clearCurrent = () => {
+    dispatch({type:CLEAR_CURRENT});
+  }
   //update Contact
 
   //Filter Contacts
@@ -65,9 +79,14 @@ const ContactState = (props) => {
       <ContactContext.Provider
       //provide all the values
       //anything we want to be able to access from other components are placed inside of here
+      //two peices of state - our contact list and current which is by default set to null
       value={{
           contacts: state.contacts,
-          addContact
+          current:state.current,
+          addContact,
+          deleteContact,
+          setCurrent,
+          clearCurrent
       }}
       >
           {props.children}
