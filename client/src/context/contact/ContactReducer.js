@@ -23,6 +23,19 @@ import {
                   ...state,
                   contacts:state.contacts.filter(contact => contact.id !== action.payload)
               }
+              //Return state and contacts will be the passed payload
+              case SET_CURRENT:
+                return{
+                    ...state,
+                    contacts:action.payload
+                }
+                //contacts is set to null because we are reseting the state to an empty one
+                case CLEAR_CURRENT:
+                    return{
+                        ...state,
+                        contacts: null
+                    }
+
           default:
               return state;
       }

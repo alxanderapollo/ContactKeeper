@@ -1,9 +1,29 @@
-import React, { useState,useContext } from "react";
+//Use effect mimics the component did mount function
+import React, { useState,useContext, useEffect } from "react";
 import ContactContext from '../../context/contact/ContactContext'
 export const ContactForm = () => {
 
 const contactContext = useContext(ContactContext)
 
+//destructure the state and add contact function
+const {addContact, current} = contactContext
+
+//want to fill the form based on whehter there is anything in the current value
+//so we bring in useEffect to do that to fill the form - if the current contact is emtpy then set
+//all the feilds to empty
+useEffect(() => {
+  if (current !== null) {
+    setContact(current);
+  } else {
+    setContact({
+      name: '',
+      email: '',
+      phone: '',
+      type: 'personal'
+    });
+  }
+    //this means we only want to update if the contactContext updates or the current state updates
+}, [current]);
 
   //example of setting a peice of state with default values
   //instead of setting each attrobute wecan use this
@@ -24,7 +44,7 @@ const contactContext = useContext(ContactContext)
       //1.prevent the page from being refreshed
       e.preventDefault();
       //2. pass into the state -  passes in all the new feilds
-      contactContext.addContact(contact)
+      addContact(contact)
       //3. reset form  to default empty
       setContact({
         name: "",

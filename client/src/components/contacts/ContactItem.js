@@ -12,6 +12,8 @@ export const ContactItem = ({ contact }) => {
   const onDelete = () => {
     //function called deleteContact that comes in from the context
     deleteContact(id)
+    //clear the current contact
+    clearCurrent()
 
   }
   return (
