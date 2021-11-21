@@ -16,6 +16,15 @@ export default (state, action) => {
         contacts: [...state.contacts, action.payload],
       };
 
+      //Update Contact
+      case UPDATE_CONTACT:
+          return {
+              ...state,
+            //   map through each contact - if the contact id is equal to the payload id
+            //return action.paload otherwise return the contact
+              contacts:state.contacts.map(contact => contact.id === action.payload.id ? action.payload : contact )
+          }
+
     //takes our state
     //return and filter through our contacts -> filter function returns an array of contacts
     //this function will return an arra without the particular passed ID
