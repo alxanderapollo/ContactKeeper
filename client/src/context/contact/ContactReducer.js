@@ -49,7 +49,22 @@ export default (state, action) => {
         ...state,
         current: null,
       };
-
+      //matches gi = global insensative matches upper or lower case words
+      case FILTER_CONTACTS:
+        return {
+          ...state,
+          filtered: state.contacts.filter(contact => {
+              const regex = new RegExp(`${action.payload}`, 'gi') 
+              //will match by either name or email
+              return contact.name.match(regex) || contact.email.match(regex);
+          })
+        };
+        //clear filter
+        case CLEAR_FILTER:
+            return {
+              ...state,
+              filtered: null,
+            };
     default:
       return state;
   }

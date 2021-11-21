@@ -39,8 +39,11 @@ const ContactState = (props) => {
         type: "personal",
       }
     ],
-    current:null 
+    current:null,
+    filtered: null 
   };
+
+  //contacts are already fetched - so we need a peice of state dedicated to filtering contacts
 
   const [state,dispatch] = useReducer(ContactReducer, initialState);
   //Actions
@@ -75,8 +78,14 @@ const ContactState = (props) => {
     
 
   //Filter Contacts
+  const filterContacts = text => {
+    dispatch({type: FILTER_CONTACTS, payload: text});
+  }
 
   //Clear Filter
+  const clearFilter = text => {
+    dispatch({type: CLEAR_FILTER}); //filter is just set back to null 
+  }
 
   //return our provider so we can wrap our entire app with this context
 
@@ -88,11 +97,14 @@ const ContactState = (props) => {
       value={{
           contacts: state.contacts,
           current:state.current,
+          filtered: state.filtered,
           addContact,
           deleteContact,
           setCurrent,
           clearCurrent,
-          updateContact
+          updateContact,
+          filterContacts,
+          clearFilter
       }}
       >
           {props.children}

@@ -307,6 +307,22 @@ img {
   border-radius: 50%;
 }
 
+/* css transtion group */
+.item-enter {
+  opacity: 0;
+}
+.item-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+.item-exit {
+  opacity: 1;
+}
+.item-exit-active {
+  opacity: 0;
+  transition: opacity 1000ms ease-in;
+}
+
 /* Forms */
 input {
   margin: 1.2rem 0;
@@ -375,6 +391,7 @@ table th {
 .navbar .welcome span {
   margin-right: 0.6rem;
 }
+
 
 /* Mobile Styles */
 @media (max-width: 700px) {
