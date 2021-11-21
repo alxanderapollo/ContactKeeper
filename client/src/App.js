@@ -7,9 +7,12 @@ import About from "./components/pages/About";
 
 //reducer
 import ContactState from './context/contact/ContactState'
+import AuthState from './context/auth/AuthState'
+
 
 const App = () => {
   return (
+    <AuthState>
     <ContactState>
     <Router>
       <React.Fragment className="App">
@@ -23,6 +26,7 @@ const App = () => {
       </React.Fragment>
     </Router>
     </ContactState>
+    </AuthState>
   );
 };
 
